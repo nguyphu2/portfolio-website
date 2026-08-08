@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit Section' if section else 'New Section' }}{% endblock %}
+{% block content %}
+    <h1>{{ 'Edit Section' if section else 'New Section' }}</h1>
+
+    <form method="POST" class="admin-form">
+        <label for="section_type">Type</label>
+        <select id="section_type" name="section_type" required>
+            {% set current_type = section.section_type if section else '' %}
+            <option value="education" {{ 'selected' if current_type == 'education' else '' }}>Education</option>
+            <option value="experience" {{ 'selected' if current_type == 'experience' else '' }}>Experience</option>
+            <option value="skills" {{ 'selected' if current_type == 'skills' else '' }}>Skills</option>
+            <option value="publication" {{ 'selected' if current_type == 'publication' else '' }}>Publication</option>
+        </select>
+
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value="{{ section.title or '' if section else '' }}" required>
+
+        <label for="subtitle">Subtitle</label>
+        <input type="text" id="subtitle" name="subtitle" value="{{ section.subtitle or '' if section else '' }}">
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4">{{ section.description or '' if section else '' }}</textarea>
+
+        <label for="order_index">Order</label>
+        <input type="number" id="order_index" name="order_index" value="{{ section.order_index if section else 0 }}">
+
+        <button type="submit">{{ 'Save Changes' if section else 'Create Section' }}</button>
+    </form>
+{% endblock %}

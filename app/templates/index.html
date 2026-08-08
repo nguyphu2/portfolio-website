@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Home - Portfolio{% endblock %}
+{% block content %}
+    <section class="band band-white">
+    <div class="band-inner">
+    <p class="section-label"><span class="section-index">01</span>about</p>
+    <div class="hero hero-about">
+        <img class="profile-photo profile-photo-lg" src="{{ url_for('static', filename='img/profile.jpg') }}" alt="Andy Nguyen">
+        <div class="hero-text">
+            <p class="eyebrow">Graduate Machine Learning Research Assistant</p>
+            <h1>andy nguyen</h1>
+            <p class="hero-sub">I am a recent graduate of Oregon State University with a B.S. in Applied Computer Science and am currently pursuing a M.S degree in Artificial Intelligence at OSU. I am continuing my research with Dr. Fitter’s SHARE Lab, where I explore and evaluate different data imputation methods to improve the quality and reliability of systems.</p>
+            <div class="highlight-row">
+                <span class="highlight-pill">Machine Learning</span>
+                <span class="highlight-pill">Data Analysis</span>
+                <span class="highlight-pill">Robotics</span>
+            </div>
+            <a class="cta" href="{{ url_for('public.contact') }}">Get in Touch</a>
+        </div>
+    </div>
+    </div>
+    </section>
+
+    <section class="band band-grey">
+    <div class="band-inner">
+        <div class="recent-layout">
+            <p class="section-label recent-label"><span class="section-index">02</span>recent</p>
+            <div class="orbit-wrap">
+                <div class="orbit-track">
+                    <div class="orbit-item orbit-item-1"><img src="{{ url_for('static', filename='img/graduation.jpg') }}" alt="Andy Nguyen at OSU graduation"></div>
+                    <div class="orbit-item orbit-item-2"><img src="{{ url_for('static', filename='img/orbit_deer.jpg') }}" alt="Andy Nguyen with a deer in Nara, Japan"></div>
+                    <div class="orbit-item orbit-item-3"><img src="{{ url_for('static', filename='img/orbit_friends.jpg') }}" alt="Andy Nguyen with a friend"></div>
+                    <div class="orbit-item orbit-item-4"><img src="{{ url_for('static', filename='img/orbit_beach.jpg') }}" alt="Andy Nguyen at the beach"></div>
+                    <div class="orbit-item orbit-item-5"><img src="{{ url_for('static', filename='img/orbit_bridge.jpg') }}" alt="Andy Nguyen with friends at the Golden Bridge, Vietnam"></div>
+                    <div class="orbit-item orbit-item-6"><img src="{{ url_for('static', filename='img/orbit_museum.jpg') }}" alt="Andy Nguyen with a friend at a museum"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <section class="band band-white">
+    <div class="band-inner">
+        <p class="section-label"><span class="section-index">03</span>recent projects</p>
+        <h2>Recent Projects</h2>
+        {% if projects %}
+            <div class="portfolio-grid">
+                {% for project in projects %}
+                    {% set link = project.live_url or project.github_url %}
+                    <a class="portfolio-tile" href="{{ link if link else '#' }}" {{ 'target="_blank" rel="noopener"' | safe if link }}>
+                        <div class="portfolio-tile-media">
+                            {% if project.image_url %}
+                                <img class="portfolio-tile-image" src="{{ project.image_url }}" alt="{{ project.title }}">
+                            {% else %}
+                                <div class="portfolio-tile-fallback"><span>{{ project.title }}</span></div>
+                            {% endif %}
+                            <div class="portfolio-tile-hover">
+                                {% if project.description %}<p>{{ project.description }}</p>{% endif %}
+                                {% if project.tech_stack %}
+                                    <div class="tech-chips">
+                                        {% for tech in project.tech_stack.split(',') %}
+                                            <span class="chip chip-dark">{{ tech.strip() }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="portfolio-tile-title">
+                            {% if project.tech_stack %}
+                                <span class="portfolio-tag">{{ project.tech_stack.split(',')[0].strip() }}</span>
+                            {% endif %}
+                            <h3><span class="status-dot {{ 'active' if project.status == 'in_progress' else 'done' }}" title="{{ 'In Progress' if project.status == 'in_progress' else 'Completed' }}"></span>{{ project.title }}</h3>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <p><a class="see-all" href="{{ url_for('public.projects') }}">See all projects &rarr;</a></p>
+        {% else %}
+            <p>No projects yet.</p>
+        {% endif %}
+    </div>
+    </section>
+{% endblock %}

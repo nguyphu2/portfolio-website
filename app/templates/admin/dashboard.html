@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+    <p class="page-lead admin-welcome">Welcome back</p>
+    <h1 class="page-title">dashboard</h1>
+
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            </div>
+            <span class="stat-number">{{ project_count }}</span>
+            <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+            </div>
+            <span class="stat-number">{{ unread_count }}</span>
+            <span class="stat-label">Unread Messages</span>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6V2z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+            </div>
+            <span class="stat-number">{{ resume_count }}</span>
+            <span class="stat-label">Resume Entries</span>
+        </div>
+    </div>
+
+    <div class="admin-cards">
+        <a class="admin-card" href="{{ url_for('admin.projects') }}">
+            <div class="admin-card-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <div>
+                <h3>Manage Projects</h3>
+                <p>Add, edit, or remove portfolio projects.</p>
+            </div>
+        </a>
+        <a class="admin-card" href="{{ url_for('admin.resume') }}">
+            <div class="admin-card-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6V2z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+            </div>
+            <div>
+                <h3>Manage Resume</h3>
+                <p>Update education, experience, skills, and publications.</p>
+            </div>
+        </a>
+        <a class="admin-card" href="{{ url_for('admin.messages') }}">
+            <div class="admin-card-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+            </div>
+            <div>
+                <h3>View Messages</h3>
+                <p>Read contact form submissions from visitors.</p>
+            </div>
+        </a>
+        <a class="admin-card admin-card-logout" href="{{ url_for('admin.logout') }}">
+            <div class="admin-card-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+            </div>
+            <div>
+                <h3>Log Out</h3>
+                <p>End your admin session.</p>
+            </div>
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+.claude/
+.env
+__pycache__/
+*.pyc
+venv/
+env/
+.vscode/
+*.avif

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+    <h1>projects</h1>
+
+    {% if not projects %}
+        <p>No projects yet.</p>
+    {% endif %}
+
+    <div class="portfolio-grid">
+        {% for project in projects %}
+            {% set link = project.live_url or project.github_url %}
+            <a class="portfolio-tile" href="{{ link if link else '#' }}" {{ 'target="_blank" rel="noopener"' | safe if link }}>
+                <div class="portfolio-tile-media">
+                    {% if project.image_url %}
+                        <img class="portfolio-tile-image" src="{{ project.image_url }}" alt="{{ project.title }}">
+                    {% else %}
+                        <div class="portfolio-tile-fallback"><span>{{ project.title }}</span></div>
+                    {% endif %}
+                    <div class="portfolio-tile-hover">
+                        {% if project.description %}<p>{{ project.description }}</p>{% endif %}
+                        {% if project.tech_stack %}
+                            <div class="tech-chips">
+                                {% for tech in project.tech_stack.split(',') %}
+                                    <span class="chip chip-dark">{{ tech.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="portfolio-tile-title">
+                    {% if project.tech_stack %}
+                        <span class="portfolio-tag">{{ project.tech_stack.split(',')[0].strip() }}</span>
+                    {% endif %}
+                    <h3><span class="status-dot {{ 'active' if project.status == 'in_progress' else 'done' }}" title="{{ 'In Progress' if project.status == 'in_progress' else 'Completed' }}"></span>{{ project.title }}</h3>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

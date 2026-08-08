@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit Project' if project else 'New Project' }}{% endblock %}
+{% block content %}
+    <h1>{{ 'Edit Project' if project else 'New Project' }}</h1>
+
+    <form method="POST" class="admin-form">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value="{{ project.title or '' if project else '' }}" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4">{{ project.description or '' if project else '' }}</textarea>
+
+        <label for="tech_stack">Tech Stack</label>
+        <input type="text" id="tech_stack" name="tech_stack" value="{{ project.tech_stack or '' if project else '' }}">
+
+        <label for="github_url">GitHub URL</label>
+        <input type="url" id="github_url" name="github_url" value="{{ project.github_url or '' if project else '' }}">
+
+        <label for="live_url">Live URL</label>
+        <input type="url" id="live_url" name="live_url" value="{{ project.live_url or '' if project else '' }}">
+
+        <label for="image_url">Image URL</label>
+        <input type="text" id="image_url" name="image_url" value="{{ project.image_url or '' if project else '' }}" placeholder="/static/img/example.jpg or https://...">
+
+
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            {% set current_status = project.status if project else 'completed' %}
+            <option value="completed" {{ 'selected' if current_status == 'completed' else '' }}>Completed</option>
+            <option value="in_progress" {{ 'selected' if current_status == 'in_progress' else '' }}>In Progress</option>
+        </select>
+
+        <button type="submit">{{ 'Save Changes' if project else 'Create Project' }}</button>
+    </form>
+{% endblock %}

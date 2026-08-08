@@ -1,0 +1,10 @@
+# Add the following packages, one per line.
+# Run: pip install -r requirements.txt
+
+# flask           - the web framework
+# flask-sqlalchemy - connects Flask to SQLAlchemy (the ORM that talks to PostgreSQL)
+# flask-login     - handles admin login sessions
+# flask-wtf       - form handling with CSRF protection
+# psycopg2-binary - PostgreSQL adapter so Python can connect to your database
+# python-dotenv   - loads secrets from a .env file so you don't hardcode passwords
+# werkzeug        - comes with Flask; use it for hashing passwords securely
