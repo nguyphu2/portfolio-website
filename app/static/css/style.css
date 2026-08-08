@@ -219,6 +219,16 @@ h2 .section-index {
 .orbit-item-5 { transform: rotate(240deg) translate(175px) rotate(-240deg); }
 .orbit-item-6 { transform: rotate(300deg) translate(175px) rotate(-300deg); }
 
+.orbit-item:hover {
+    z-index: 5;
+}
+
+.orbit-item-spin {
+    width: 100%;
+    height: 100%;
+    animation: orbit-counter 34s linear infinite;
+}
+
 .orbit-item img {
     width: 100%;
     height: 100%;
@@ -227,7 +237,21 @@ h2 .section-index {
     border: 4px solid #ffffff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
     display: block;
-    animation: orbit-counter 34s linear infinite;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.orbit-item:hover img {
+    transform: scale(1.2);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.28);
+}
+
+/* Pause the whole orbit while hovering any single photo */
+.orbit-track:has(.orbit-item:hover) {
+    animation-play-state: paused;
+}
+
+.orbit-track:has(.orbit-item:hover) .orbit-item-spin {
+    animation-play-state: paused;
 }
 
 @keyframes orbit-spin {
