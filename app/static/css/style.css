@@ -94,6 +94,14 @@ nav.site-nav .nav-links a:hover {
     color: #ffffff;
 }
 
+nav.site-nav .nav-links a.active {
+    color: #ffffff;
+}
+
+nav.site-nav .nav-links a.active::after {
+    transform: scaleX(1);
+}
+
 nav.site-nav .nav-links a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
