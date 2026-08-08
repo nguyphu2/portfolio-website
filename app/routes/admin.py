@@ -34,13 +34,56 @@ def logout():
 def dashboard():
     project_count = Project.query.count()
     unread_count = Contact.query.filter_by(is_read=False).count()
+    read_count = Contact.query.filter_by(is_read=True).count()
     resume_count = Resume.query.count()
+
+    completed_count = Project.query.filter_by(status='completed').count()
+    in_progress_count = Project.query.filter_by(status='in_progress').count()
+
+    resume_by_type = {}
+    for section_type, count in db.session.query(Resume.section_type, db.func.count(Resume.id)).group_by(Resume.section_type).all():
+        resume_by_type[section_type] = count
+
     return render_template(
         'admin/dashboard.html',
         project_count=project_count,
         unread_count=unread_count,
+        read_count=read_count,
         resume_count=resume_count,
+        completed_count=completed_count,
+        in_progress_count=in_progress_count,
+        resume_by_type=resume_by_type,
     )
+
+
+@admin.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+
+        if not current_user.check_password(current_password):
+            flash('Current password is incorrect')
+            return render_template('admin/settings.html')
+
+        new_username = request.form.get('username')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if new_password and new_password != confirm_password:
+            flash('New passwords do not match')
+            return render_template('admin/settings.html')
+
+        if new_username:
+            current_user.username = new_username
+        if new_password:
+            current_user.set_password(new_password)
+
+        db.session.commit()
+        flash('Settings updated')
+        return redirect(url_for('admin.settings'))
+
+    return render_template('admin/settings.html')
 
 
 # ---------------------------------------------------------------------------

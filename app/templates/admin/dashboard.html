@@ -28,6 +28,21 @@
         </div>
     </div>
 
+    <div class="dashboard-charts">
+        <div class="chart-card">
+            <h3>Project Status</h3>
+            <canvas id="projectStatusChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Messages</h3>
+            <canvas id="messagesChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Resume Entries</h3>
+            <canvas id="resumeChart"></canvas>
+        </div>
+    </div>
+
     <div class="admin-cards">
         <a class="admin-card" href="{{ url_for('admin.projects') }}">
             <div class="admin-card-icon">
@@ -56,6 +71,15 @@
                 <p>Read contact form submissions from visitors.</p>
             </div>
         </a>
+        <a class="admin-card" href="{{ url_for('admin.settings') }}">
+            <div class="admin-card-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <div>
+                <h3>Settings</h3>
+                <p>Change your admin username or password.</p>
+            </div>
+        </a>
         <a class="admin-card admin-card-logout" href="{{ url_for('admin.logout') }}">
             <div class="admin-card-icon">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
@@ -66,4 +90,57 @@
             </div>
         </a>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script>
+        const chartColors = ['#000000', '#9ca3af', '#4b5563', '#d1d5db', '#6b7280'];
+
+        new Chart(document.getElementById('projectStatusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'In Progress'],
+                datasets: [{
+                    data: [{{ completed_count }}, {{ in_progress_count }}],
+                    backgroundColor: ['#000000', '#22c55e'],
+                    borderWidth: 0,
+                }],
+            },
+            options: {
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+            },
+        });
+
+        new Chart(document.getElementById('messagesChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Read', 'Unread'],
+                datasets: [{
+                    data: [{{ read_count }}, {{ unread_count }}],
+                    backgroundColor: ['#d1d5db', '#000000'],
+                    borderWidth: 0,
+                }],
+            },
+            options: {
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+            },
+        });
+
+        new Chart(document.getElementById('resumeChart'), {
+            type: 'bar',
+            data: {
+                labels: [{% for key in resume_by_type.keys() %}'{{ key }}',{% endfor %}],
+                datasets: [{
+                    data: [{% for value in resume_by_type.values() %}{{ value }},{% endfor %}],
+                    backgroundColor: '#000000',
+                    borderRadius: 4,
+                }],
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+            },
+        });
+    </script>
 {% endblock %}

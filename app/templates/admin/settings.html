@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Admin Settings{% endblock %}
+{% block content %}
+    <h1 class="page-title">settings</h1>
+    <p class="page-lead">Change your admin username or password.</p>
+
+    <form method="POST" class="admin-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="{{ current_user.username }}">
+
+        <label for="new_password">New Password</label>
+        <input type="password" id="new_password" name="new_password" placeholder="Leave blank to keep current password">
+
+        <label for="confirm_password">Confirm New Password</label>
+        <input type="password" id="confirm_password" name="confirm_password">
+
+        <label for="current_password">Current Password</label>
+        <input type="password" id="current_password" name="current_password" required placeholder="Required to save any changes">
+
+        <button type="submit">Save Changes</button>
+    </form>
+{% endblock %}

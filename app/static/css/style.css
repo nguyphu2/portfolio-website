@@ -961,6 +961,33 @@ tr.unread {
     font-size: 0.9rem;
 }
 
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin: 0.5rem 0 2rem;
+}
+
+.chart-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.chart-card h3 {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.chart-card canvas {
+    max-height: 220px;
+}
+
 .admin-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1029,6 +1056,10 @@ tr.unread {
     }
 
     .admin-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-charts {
         grid-template-columns: 1fr;
     }
 }
