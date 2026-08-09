@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app import db
+from app import db, limiter
 from app.models import Project, Resume, Contact
 
 public = Blueprint('public', __name__)
@@ -101,6 +101,7 @@ def resume():
 
 
 @public.route('/contact', methods=['GET', 'POST'])
+@limiter.limit('5 per hour', methods=['POST'])
 def contact():
     if request.method == 'POST':
         message = Contact(

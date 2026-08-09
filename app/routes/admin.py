@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from app.models import Project, Resume, Contact, AdminUser
@@ -15,6 +15,7 @@ def login():
         user = AdminUser.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
+            session.permanent = True
             login_user(user)
             return redirect(url_for('admin.dashboard'))
 
