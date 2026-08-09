@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% block title %}Resume{% endblock %}
+{% block title %}Experience{% endblock %}
 {% block content %}
-    <h1>resume</h1>
+    <h1>experience</h1>
 
     {% set publications = sections | selectattr('section_type', 'equalto', 'publication') | list %}
     {% if publications %}
@@ -48,9 +48,14 @@
         <h2><span class="section-index">{{ '03' if publications else '02' }}</span>Experience</h2>
         <div class="timeline">
             {% for section in sections | selectattr('section_type', 'equalto', 'experience') %}
-                <div class="resume-entry">
-                    <h3>{{ section.title }}</h3>
-                    {% if section.subtitle %}<p class="subtitle">{{ section.subtitle }}</p>{% endif %}
+                <details class="resume-entry resume-accordion">
+                    <summary class="resume-accordion-summary">
+                        <span>
+                            <h3>{{ section.title }}</h3>
+                            {% if section.subtitle %}<p class="subtitle">{{ section.subtitle }}</p>{% endif %}
+                        </span>
+                        <span class="resume-accordion-toggle" aria-hidden="true">+</span>
+                    </summary>
                     {% if section.description %}
                         <ul class="resume-bullets">
                             {% for line in section.description.split('\n') if line.strip() %}
@@ -58,7 +63,7 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-                </div>
+                </details>
             {% endfor %}
         </div>
     </div>
@@ -66,21 +71,28 @@
 
     <section class="band band-white">
     <div class="band-inner">
-        <h2><span class="section-index">{{ '04' if publications else '03' }}</span>Skills</h2>
-        <div class="skills-grid">
-            {% for section in sections | selectattr('section_type', 'equalto', 'skills') %}
-                <div class="resume-entry">
-                    <h3>{{ section.title }}</h3>
-                    {% if section.subtitle %}<p class="subtitle">{{ section.subtitle }}</p>{% endif %}
-                    {% if section.description %}
-                        <ul class="resume-bullets">
-                            {% for line in section.description.split('\n') if line.strip() %}
-                                <li>{{ line.strip() }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+        <h2><span class="section-index">{{ '04' if publications else '03' }}</span>Tech Stack</h2>
+        <div class="tech-belt">
+            <div class="tech-belt-row">
+                <div class="tech-belt-track">
+                    {% for item in tech_row1 + tech_row1 %}
+                        <span class="tech-pill">
+                            {% if item.icon %}<img src="https://cdn.simpleicons.org/{{ item.icon }}" alt="">{% endif %}
+                            {{ item.name }}
+                        </span>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
+            <div class="tech-belt-row">
+                <div class="tech-belt-track tech-belt-track-reverse">
+                    {% for item in tech_row2 + tech_row2 %}
+                        <span class="tech-pill">
+                            {% if item.icon %}<img src="https://cdn.simpleicons.org/{{ item.icon }}" alt="">{% endif %}
+                            {{ item.name }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
     </section>

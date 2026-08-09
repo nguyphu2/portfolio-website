@@ -424,6 +424,26 @@ footer {
     gap: 2.5rem;
 }
 
+.github-chart-wrap {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.github-chart-label {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin: 0 0 1rem;
+}
+
+.github-chart {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 .hero-about .profile-photo {
     width: 160px;
     height: 160px;
@@ -719,13 +739,82 @@ footer {
 }
 
 .resume-entry {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    padding: 1rem 1.25rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0.25rem;
+    margin-bottom: 0;
+    border-radius: 0;
     position: relative;
     transition: transform 0.15s ease;
+}
+
+.resume-entry:last-child {
+    border-bottom: none;
+}
+
+/* Accordion (used for Experience entries) */
+.resume-accordion {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.resume-accordion:last-child {
+    border-bottom: none;
+}
+
+.resume-accordion-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 0.25rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.resume-accordion-summary::-webkit-details-marker {
+    display: none;
+}
+
+.resume-accordion-summary h3,
+.resume-accordion-summary .subtitle {
+    margin: 0;
+}
+
+.resume-accordion-summary .subtitle {
+    margin-top: 0.25rem;
+}
+
+.resume-accordion-toggle {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.resume-accordion:hover .resume-accordion-toggle {
+    background-color: var(--bg-card-hover);
+}
+
+.resume-accordion[open] .resume-accordion-toggle {
+    transform: rotate(45deg);
+}
+
+.resume-accordion .resume-bullets {
+    padding: 0 0.25rem 1.1rem;
+    margin: 0;
 }
 
 .timeline .resume-entry::before {
@@ -771,6 +860,62 @@ footer {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
+}
+
+/* TECH STACK BELT */
+.tech-belt {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    overflow: hidden;
+}
+
+.tech-belt-row {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+
+.tech-belt-track {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: max-content;
+    animation: belt-scroll 32s linear infinite;
+}
+
+.tech-belt-track-reverse {
+    animation-direction: reverse;
+}
+
+.tech-belt-row:hover .tech-belt-track {
+    animation-play-state: paused;
+}
+
+@keyframes belt-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+.tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tech-pill img {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
 }
 
 section h2 {
