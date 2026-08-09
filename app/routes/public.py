@@ -8,27 +8,38 @@ public = Blueprint('public', __name__)
 # tech stack belt because they're methodology, not actual tools/technologies.
 NON_TECH_SKILL_CATEGORIES = {'Analytics & Experimentation'}
 
+SIMPLE_ICONS_BASE = 'https://cdn.simpleicons.org/'
+
+# Some brands aren't in Simple Icons (trademark-policy exclusions) - those
+# map to a full external URL instead of a Simple Icons slug.
 TECH_ICON_MAP = {
-    'python': 'python',
-    'javascript': 'javascript',
-    'c++': 'cplusplus',
-    'postgresql': 'postgresql',
-    'git': 'git',
-    'github': 'github',
-    'asana': 'asana',
-    'docker': 'docker',
-    'pytorch': 'pytorch',
-    'tensorflow': 'tensorflow',
-    'scikit-learn': 'scikitlearn',
-    'numpy': 'numpy',
-    'pandas': 'pandas',
-    'opencv': 'opencv',
-    'huggingface': 'huggingface',
-    'weights & biases': 'weightsandbiases',
-    # AWS, S3, Lambda, Power BI, Tableau, and Matplotlib have no icon in
-    # Simple Icons' library (likely trademark-policy exclusions) - they
-    # intentionally fall back to text-only pills rather than a broken image.
+    'python': SIMPLE_ICONS_BASE + 'python',
+    'javascript': SIMPLE_ICONS_BASE + 'javascript',
+    'c++': SIMPLE_ICONS_BASE + 'cplusplus',
+    'mysql': SIMPLE_ICONS_BASE + 'mysql',
+    'rstudio': SIMPLE_ICONS_BASE + 'rstudioide',
+    'postgresql': SIMPLE_ICONS_BASE + 'postgresql',
+    'git': SIMPLE_ICONS_BASE + 'git',
+    'github': SIMPLE_ICONS_BASE + 'github',
+    'asana': SIMPLE_ICONS_BASE + 'asana',
+    'docker': SIMPLE_ICONS_BASE + 'docker',
+    'pytorch': SIMPLE_ICONS_BASE + 'pytorch',
+    'tensorflow': SIMPLE_ICONS_BASE + 'tensorflow',
+    'scikit-learn': SIMPLE_ICONS_BASE + 'scikitlearn',
+    'numpy': SIMPLE_ICONS_BASE + 'numpy',
+    'pandas': SIMPLE_ICONS_BASE + 'pandas',
+    'opencv': SIMPLE_ICONS_BASE + 'opencv',
+    'yolov8': SIMPLE_ICONS_BASE + 'yolo',
+    'huggingface': SIMPLE_ICONS_BASE + 'huggingface',
+    'weights & biases': SIMPLE_ICONS_BASE + 'weightsandbiases',
+    'power bi': 'https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg',
+    'matplotlib': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg',
+    'tableau': 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Tableau_Logo.png',
 }
+
+_AWS_LOGO = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg'
+for _aws_service in ('aws', 's3', 'ec2', 'lambda', 'sagemaker', 'rds', 'iam', 'cloudwatch'):
+    TECH_ICON_MAP[_aws_service] = _AWS_LOGO
 
 
 def _split_skills(text):

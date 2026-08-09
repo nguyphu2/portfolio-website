@@ -81,7 +81,7 @@
                 <div class="tech-belt-track">
                     {% for item in tech_row1 + tech_row1 %}
                         <span class="tech-pill">
-                            {% if item.icon %}<img src="https://cdn.simpleicons.org/{{ item.icon }}" alt="">{% endif %}
+                            {% if item.icon %}<img src="{{ item.icon }}" alt="">{% endif %}
                             {{ item.name }}
                         </span>
                     {% endfor %}
@@ -91,7 +91,7 @@
                 <div class="tech-belt-track tech-belt-track-reverse">
                     {% for item in tech_row2 + tech_row2 %}
                         <span class="tech-pill">
-                            {% if item.icon %}<img src="https://cdn.simpleicons.org/{{ item.icon }}" alt="">{% endif %}
+                            {% if item.icon %}<img src="{{ item.icon }}" alt="">{% endif %}
                             {{ item.name }}
                         </span>
                     {% endfor %}
