@@ -6,3 +6,4 @@ venv/
 env/
 .vscode/
 *.avif
+app/static/files/resume/

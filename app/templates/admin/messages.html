@@ -15,10 +15,10 @@
         </thead>
         <tbody>
             {% for msg in messages %}
-                <tr class="{{ 'unread' if not msg.is_read else '' }}">
+                <tr class="{{ 'unread' if not msg.is_read else 'read' }}" onclick="window.location='{{ url_for('admin.message_detail', id=msg.id) }}'">
                     <td>{{ msg.name }}</td>
                     <td>{{ msg.email }}</td>
-                    <td>{{ msg.message }}</td>
+                    <td>{{ msg.message[:60] }}{{ '...' if msg.message|length > 60 else '' }}</td>
                     <td>{{ msg.created_at }}</td>
                     <td>{{ 'Read' if msg.is_read else 'New' }}</td>
                 </tr>

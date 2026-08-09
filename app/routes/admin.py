@@ -1,9 +1,23 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+import os
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.utils import secure_filename
 from app import db
 from app.models import Project, Resume, Contact, AdminUser
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
+
+RESUME_PDF_DIR = os.path.join('app', 'static', 'files', 'resume')
+
+
+def _save_resume_pdf(file_storage):
+    if os.path.splitext(file_storage.filename)[1].lower() != '.pdf':
+        return None
+    os.makedirs(RESUME_PDF_DIR, exist_ok=True)
+    filename = secure_filename(file_storage.filename)
+    filename = f"{os.urandom(4).hex()}_{filename}"
+    file_storage.save(os.path.join(RESUME_PDF_DIR, filename))
+    return filename
 
 
 @admin.route('/login', methods=['GET', 'POST'])
@@ -161,13 +175,18 @@ def resume():
 @login_required
 def new_resume_section():
     if request.method == 'POST':
+        max_order = db.session.query(db.func.max(Resume.order_index)).scalar() or 0
         section = Resume(
             section_type=request.form.get('section_type'),
             title=request.form.get('title'),
             subtitle=request.form.get('subtitle'),
             description=request.form.get('description'),
-            order_index=request.form.get('order_index', 0, type=int),
+            order_index=max_order + 1,
+            link_url=request.form.get('link_url') or None,
         )
+        pdf = request.files.get('pdf')
+        if pdf and pdf.filename:
+            section.pdf_filename = _save_resume_pdf(pdf)
         db.session.add(section)
         db.session.commit()
         return redirect(url_for('admin.resume'))
@@ -185,7 +204,10 @@ def edit_resume_section(id):
         section.title = request.form.get('title')
         section.subtitle = request.form.get('subtitle')
         section.description = request.form.get('description')
-        section.order_index = request.form.get('order_index', 0, type=int)
+        section.link_url = request.form.get('link_url') or None
+        pdf = request.files.get('pdf')
+        if pdf and pdf.filename:
+            section.pdf_filename = _save_resume_pdf(pdf)
         db.session.commit()
         return redirect(url_for('admin.resume'))
 
@@ -201,6 +223,19 @@ def delete_resume_section(id):
     return redirect(url_for('admin.resume'))
 
 
+@admin.route('/resume/reorder', methods=['POST'])
+@login_required
+def reorder_resume_sections():
+    entries = request.get_json(force=True).get('order', [])
+    for index, entry in enumerate(entries):
+        Resume.query.filter_by(id=entry['id']).update({
+            'order_index': index,
+            'section_type': entry['section_type'],
+        })
+    db.session.commit()
+    return jsonify({'status': 'ok'})
+
+
 # ---------------------------------------------------------------------------
 # Messages
 # ---------------------------------------------------------------------------
@@ -209,10 +244,22 @@ def delete_resume_section(id):
 @login_required
 def messages():
     all_messages = Contact.query.order_by(Contact.created_at.desc()).all()
-
-    for msg in all_messages:
-        if not msg.is_read:
-            msg.is_read = True
-    db.session.commit()
-
     return render_template('admin/messages.html', messages=all_messages)
+
+
+@admin.route('/messages/<int:id>', methods=['GET'])
+@login_required
+def message_detail(id):
+    msg = Contact.query.get_or_404(id)
+    msg.is_read = True
+    db.session.commit()
+    return render_template('admin/message_detail.html', msg=msg)
+
+
+@admin.route('/messages/<int:id>/delete', methods=['POST'])
+@login_required
+def delete_message(id):
+    msg = Contact.query.get_or_404(id)
+    db.session.delete(msg)
+    db.session.commit()
+    return redirect(url_for('admin.messages'))

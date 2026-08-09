@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{{ 'Edit Section' if section else 'New Section' }}</h1>
 
-    <form method="POST" class="admin-form">
+    <form method="POST" class="admin-form" enctype="multipart/form-data">
         <label for="section_type">Type</label>
         <select id="section_type" name="section_type" required>
             {% set current_type = section.section_type if section else '' %}
@@ -22,9 +22,29 @@
         <label for="description">Description</label>
         <textarea id="description" name="description" rows="4">{{ section.description or '' if section else '' }}</textarea>
 
-        <label for="order_index">Order</label>
-        <input type="number" id="order_index" name="order_index" value="{{ section.order_index if section else 0 }}">
+        <div id="publication-fields" class="publication-fields">
+            <label for="link_url">Link URL</label>
+            <input type="url" id="link_url" name="link_url" value="{{ section.link_url or '' if section else '' }}" placeholder="https://...">
+
+            <label for="pdf">PDF</label>
+            {% if section and section.pdf_filename %}
+                <p><a href="{{ url_for('static', filename='files/resume/' + section.pdf_filename) }}" target="_blank" rel="noopener">Current PDF</a></p>
+            {% endif %}
+            <input type="file" id="pdf" name="pdf" accept="application/pdf">
+        </div>
 
         <button type="submit">{{ 'Save Changes' if section else 'Create Section' }}</button>
     </form>
+
+    <script>
+        (function () {
+            const select = document.getElementById('section_type');
+            const fields = document.getElementById('publication-fields');
+            function sync() {
+                fields.style.display = select.value === 'publication' ? '' : 'none';
+            }
+            select.addEventListener('change', sync);
+            sync();
+        })();
+    </script>
 {% endblock %}

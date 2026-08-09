@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Message from {{ msg.name }}{% endblock %}
+{% block content %}
+    <a href="{{ url_for('admin.messages') }}">&larr; Back to messages</a>
+
+    <h1>{{ msg.name }}</h1>
+    <p class="message-meta">
+        <a href="mailto:{{ msg.email }}">{{ msg.email }}</a>
+        &middot;
+        {{ msg.created_at }}
+    </p>
+
+    <div class="message-body">{{ msg.message }}</div>
+
+    <form method="POST" action="{{ url_for('admin.delete_message', id=msg.id) }}" class="inline-form" onsubmit="return confirm('Delete this message?');">
+        <button type="submit">Delete</button>
+    </form>
+{% endblock %}

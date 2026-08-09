@@ -1082,6 +1082,68 @@ th {
 tr.unread {
     background-color: #f0f0f0;
     font-weight: 600;
+    cursor: pointer;
+}
+
+tr.read {
+    color: var(--text-dim);
+    cursor: pointer;
+}
+
+.message-meta {
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+}
+
+.message-body {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: var(--text-dim);
+    width: 1.5rem;
+    text-align: center;
+}
+
+.admin-resume-band {
+    margin-bottom: 2rem;
+}
+
+.admin-resume-dropzone {
+    min-height: 4rem;
+    border: 1px dashed var(--text-dim);
+    border-radius: 6px;
+    padding: 0.5rem;
+}
+
+.admin-resume-card {
+    cursor: grab;
+    position: relative;
+    padding-left: 2rem;
+    border-bottom: 1px solid var(--text-dim);
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.admin-resume-card:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.admin-resume-card .drag-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.admin-resume-card-actions {
+    clear: both;
+}
+
+.admin-resume-card-actions .inline-form {
+    display: inline;
 }
 
 /* DASHBOARD */

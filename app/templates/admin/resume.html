@@ -4,31 +4,102 @@
     <h1>Manage Resume</h1>
     <p><a href="{{ url_for('admin.new_resume_section') }}" class="cta">+ New Section</a></p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Title</th>
-                <th>Subtitle</th>
-                <th>Order</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for section in sections %}
+    {% for section_type, label in [('publication', 'Publications'), ('education', 'Education'), ('experience', 'Experience')] %}
+        <section class="admin-resume-band">
+            <h2>{{ label }}</h2>
+            <div class="admin-resume-dropzone" data-type="{{ section_type }}">
+                {% for section in sections if section.section_type == section_type %}
+                    <div class="resume-entry admin-resume-card" draggable="true" data-id="{{ section.id }}">
+                        <span class="drag-handle">&#9776;</span>
+                        <h3>{{ section.title }}</h3>
+                        {% if section.subtitle %}<p class="subtitle">{{ section.subtitle }}</p>{% endif %}
+                        {% if section_type == 'publication' and (section.link_url or section.pdf_filename) %}
+                            <p class="subtitle">
+                                {% if section.link_url %}<a href="{{ section.link_url }}" target="_blank" rel="noopener">Link</a>{% endif %}
+                                {% if section.link_url and section.pdf_filename %} &middot; {% endif %}
+                                {% if section.pdf_filename %}<a href="{{ url_for('static', filename='files/resume/' + section.pdf_filename) }}" target="_blank" rel="noopener">PDF</a>{% endif %}
+                            </p>
+                        {% endif %}
+                        <div class="admin-resume-card-actions">
+                            <a href="{{ url_for('admin.edit_resume_section', id=section.id) }}">Edit</a>
+                            <form method="POST" action="{{ url_for('admin.delete_resume_section', id=section.id) }}" class="inline-form">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endfor %}
+
+    <section class="admin-resume-band">
+        <h2>Skills</h2>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ section.section_type }}</td>
-                    <td>{{ section.title }}</td>
-                    <td>{{ section.subtitle }}</td>
-                    <td>{{ section.order_index }}</td>
-                    <td>
-                        <a href="{{ url_for('admin.edit_resume_section', id=section.id) }}">Edit</a>
-                        <form method="POST" action="{{ url_for('admin.delete_resume_section', id=section.id) }}" class="inline-form">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
+                    <th>Title</th>
+                    <th>Subtitle</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for section in sections if section.section_type == 'skills' %}
+                    <tr>
+                        <td>{{ section.title }}</td>
+                        <td>{{ section.subtitle }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_resume_section', id=section.id) }}">Edit</a>
+                            <form method="POST" action="{{ url_for('admin.delete_resume_section', id=section.id) }}" class="inline-form">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const dropzones = document.querySelectorAll('.admin-resume-dropzone');
+    let dragging = null;
+
+    dropzones.forEach((zone) => {
+        zone.addEventListener('dragstart', (e) => {
+            dragging = e.target.closest('.admin-resume-card');
+        });
+
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (!dragging) return;
+            const target = e.target.closest('.admin-resume-card');
+            if (!target) {
+                zone.appendChild(dragging);
+                return;
+            }
+            if (target === dragging) return;
+            const rect = target.getBoundingClientRect();
+            const before = (e.clientY - rect.top) < rect.height / 2;
+            zone.insertBefore(dragging, before ? target : target.nextSibling);
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const order = [];
+            dropzones.forEach((z) => {
+                z.querySelectorAll('.admin-resume-card').forEach((card) => {
+                    order.push({ id: card.dataset.id, section_type: z.dataset.type });
+                });
+            });
+            fetch("{{ url_for('admin.reorder_resume_sections') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order }),
+            });
+        });
+    });
+})();
+</script>
 {% endblock %}

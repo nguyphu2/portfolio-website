@@ -20,6 +20,10 @@ class Resume(db.Model):
     
     order_index = db.Column(db.Integer, default = 0)
 
+    link_url = db.Column(db.String(500), nullable = True)
+
+    pdf_filename = db.Column(db.String(300), nullable = True)
+
     
 
 

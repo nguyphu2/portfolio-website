@@ -14,7 +14,11 @@
                         <h3>{{ pub.title }}</h3>
                         {% if pub.subtitle %}<p class="subtitle">{{ pub.subtitle }}</p>{% endif %}
                         {% if pub.description %}<p>{{ pub.description }}</p>{% endif %}
-                        <p class="project-links"><a href="{{ url_for('static', filename='files/missingness-icra2026.pdf') }}" target="_blank" rel="noopener">Read the paper (PDF) &rarr;</a></p>
+                        {% if pub.pdf_filename %}
+                            <p class="project-links"><a href="{{ url_for('static', filename='files/resume/' + pub.pdf_filename) }}" target="_blank" rel="noopener">Read the paper (PDF) &rarr;</a></p>
+                        {% elif pub.link_url %}
+                            <p class="project-links"><a href="{{ pub.link_url }}" target="_blank" rel="noopener">Read the paper &rarr;</a></p>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
