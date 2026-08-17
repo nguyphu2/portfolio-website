@@ -50,7 +50,7 @@
                     <a class="portfolio-tile" href="{{ link if link else '#' }}" {{ 'target="_blank" rel="noopener"' | safe if link }}>
                         <div class="portfolio-tile-media">
                             {% if project.image_url %}
-                                <img class="portfolio-tile-image" src="{{ project.image_url }}" alt="{{ project.title }}">
+                                <img class="portfolio-tile-image{{ ' portfolio-tile-image-icon' if 'logo' in project.image_url }}" src="{{ project.image_url }}" alt="{{ project.title }}">
                             {% else %}
                                 <div class="portfolio-tile-fallback"><span>{{ project.title }}</span></div>
                             {% endif %}
