@@ -614,6 +614,7 @@ footer {
 .portfolio-tile-image.portfolio-tile-image-icon {
     object-fit: contain;
     padding: 4rem;
+    background-color: #fff;
 }
 
 .portfolio-tile-image,
