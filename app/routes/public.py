@@ -38,7 +38,7 @@ TECH_ICON_MAP = {
 }
 
 _AWS_LOGO = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg'
-for _aws_service in ('aws', 's3', 'ec2', 'lambda', 'sagemaker', 'rds', 'iam', 'cloudwatch'):
+for _aws_service in ('aws', 'bedrock', 'lambda', 'api gateway', 's3', 'dynamodb', 'cognito', 'cloudfront', 'eventbridge', 'textract', 'sagemaker'):
     TECH_ICON_MAP[_aws_service] = _AWS_LOGO
 
 
